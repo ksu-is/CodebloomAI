@@ -1,12 +1,11 @@
 # CodebloomAI
-CodebloomAI is a python PaLM2-based code generator and modifier application, allowing
-side by side coding and AI assistance.
+CodebloomAI is a python PaLM2-based AI code generator and modifier application, allowing side by side coding and AI assistance.
 
 ### PaLM2
-PaLM2 is ![Google's AI language model](https://github.com/google/generative-ai-docs/), which drives conversational AI program !['Google Bard'](https://bard.google.com).
+[PaLM2](https://github.com/google/generative-ai-docs/) is Google's AI lanuage model which drives conversational AI program [Google Bard](https://bard.google.com).
 
 ### Credits
-Interface was developed using ![TomSchimansky's 'CustomTkinter'](https://github.com/TomSchimansky/CustomTkinter).
+Interface was developed using [TomSchimansky's](https://github.com/TomSchimansky) [CustomTkinter](https://github.com/TomSchimansky/CustomTkinter).
 
 
 ## Setup
@@ -16,14 +15,14 @@ in the configure file.
 ### Getting a key
 Go to **➡️ https://makersuite.google.com/app/apikey**.
 
-![](doc-images-images/google-api-box.png)
+![](doc-images/google-api-box.png)
 Select **Create API key in new project**
 
 Once generated, you will see a pop up with your API code
 
 ![](doc-images/google-api-generated.png)
 Select **Copy**
-__For your safety, please don't leak this key.__
+*For your safety, please don't leak this key.*
 
 ### Embedding the key
 In your clone/fork of the CodebloomAI repository, rename `config_template.py` to `config.py`. 
@@ -35,7 +34,7 @@ Then, open `config.py` with your IDE, and paste your key as a string in the `pal
 
 palm2_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ```
-| __`config.py`__
+| *`config.py`*
 
 
 ## Required Installs
