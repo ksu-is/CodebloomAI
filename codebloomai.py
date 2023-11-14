@@ -98,11 +98,11 @@ class App(ctk.CTk):
         self.out_copy_button.grid(row=0, column=1)
 
         # input textbox
-        self.in_textbox = ctk.CTkTextbox(self.home_frame, width=400, height=515)
+        self.in_textbox = ctk.CTkTextbox(self.home_frame, width=400, height=515, font=ctk.CTkFont(family= "Consolas"))
         self.in_textbox.grid(row=1, column=0, padx=(20, 10), sticky="nsew") 
 
         # output textbox
-        self.out_textbox = ctk.CTkTextbox(self.home_frame, width=400, height=515)
+        self.out_textbox = ctk.CTkTextbox(self.home_frame, width=400, height=515, font=ctk.CTkFont(family= "Consolas"))
         self.out_textbox.grid(row=1, column=1, padx=(10, 20), sticky="nsew")
 
         ## command area frame
@@ -133,7 +133,7 @@ class App(ctk.CTk):
         self.history_clear_button.grid(row=0, column=1)
         
         # history textbox
-        self.history_log_textbox = ctk.CTkTextbox(self.history_frame, width=810, height=565)
+        self.history_log_textbox = ctk.CTkTextbox(self.history_frame, width=810, height=565, font=ctk.CTkFont(family= "Consolas"))
         self.history_log_textbox.grid(row=1, column=0, padx=20, sticky="nsew")
 
         ### tweak frame
@@ -216,7 +216,7 @@ class App(ctk.CTk):
         history_file.write(f"In Code:\n{user_code}\n\n")
         history_file.write(f"Out Code:\n{completion.result}\n\n")
         history_file.write(f"{datetime.datetime.now()}\n")
-        history_file.write("_"*128+"\n\n")
+        history_file.write("_"*112+"\n\n")
         
         # close files
         context_file.close()
