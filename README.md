@@ -42,4 +42,5 @@ palm2_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 pip install -q google-generativeai
 pip install tkinter
 pip install customtkinter
+pip install pyperclip
 ```

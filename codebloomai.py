@@ -5,6 +5,7 @@ import google.generativeai as palm
 
 import tkinter as tk
 import tkinter.messagebox as tkm
+import tkinter.filedialog as tkfd
 import customtkinter as ctk
 
 import config
@@ -61,7 +62,7 @@ class App(ctk.CTk):
                                             anchor="w", command=self.tweak_button_event)
         self.tweak_button.grid(row=3, column=0, sticky="ew")
         # nav page select appearence
-        self.appearance_mode_menu = ctk.CTkOptionMenu(self.navigation_frame, values=["Light", "Dark", "System"],
+        self.appearance_mode_menu = ctk.CTkOptionMenu(self.navigation_frame, values=["System", "Light", "Dark"],
                                                                 command=self.change_appearance_mode_event)
         self.appearance_mode_menu.grid(row=6, column=0, padx=20, pady=20, sticky="s")
 
@@ -74,28 +75,40 @@ class App(ctk.CTk):
         self.in_head_frame.grid(row=0, column=0, padx=(20,10), pady=5)
         # in head label
         self.in_textbox_label = ctk.CTkLabel(self.in_head_frame, text="Code In",
-                                                anchor="w", width=340, font=ctk.CTkFont(size=15, weight="bold"))
+                                                anchor="w", width=290, font=ctk.CTkFont(size=15, weight="bold"))
         self.in_textbox_label.grid(row=0, column=0)
+        # in head open button
+        self.in_open_button = ctk.CTkButton(master=self.in_head_frame, fg_color="transparent", border_width=1, text_color=("gray10", "#DCE4EE"), text="📁",
+                                                width=10, command=self.in_open_button_event)
+        self.in_open_button.grid(row=0, column=1)
+        # in head save button 
+        self.in_save_button = ctk.CTkButton(master=self.in_head_frame, fg_color="transparent", border_width=1, text_color=("gray10", "#DCE4EE"), text="💾",
+                                                width=10, command=self.in_save_button_event)
+        self.in_save_button.grid(row=0, column=2)
         # in head delete button
         self.in_delete_button = ctk.CTkButton(master=self.in_head_frame, fg_color="transparent", border_width=1, text_color=("gray10", "#DCE4EE"), text="🗑",
                                                 width=10, command=self.in_delete_button_event)
-        self.in_delete_button.grid(row=0, column=1)
-        # in head out-to-in swap button
-        self.oti_swap_button = ctk.CTkButton(master=self.in_head_frame, fg_color="transparent", border_width=1, text_color=("gray10", "#DCE4EE"), text="↶",
-                                                width=10, command=self.swap_button_event)
-        self.oti_swap_button.grid(row=0, column=2)
-
+        self.in_delete_button.grid(row=0, column=3)
+        # in head run button
+        self.exec_button = ctk.CTkButton(master=self.in_head_frame, fg_color="transparent", border_width=1, text_color=("gray10", "#DCE4EE"), text="⏵",
+                                                width=10, command=self.exec_button_event)
+        self.exec_button.grid(row=0, column=4)
+        
         ## output heading frame
         self.out_head_frame = ctk.CTkFrame(self.home_frame, width=400, height=20, fg_color="transparent")
         self.out_head_frame.grid(row=0, column=1, padx=(10,20), pady=5)
         # out head label
         self.out_textbox_label = ctk.CTkLabel(self.out_head_frame, text="Code Out",
-                                                anchor="w", width=350, font=ctk.CTkFont(size=15, weight="bold"))
+                                                anchor="w", width=340, font=ctk.CTkFont(size=15, weight="bold"))
         self.out_textbox_label.grid(row=0, column=0)
+        # out head swap button
+        self.oti_swap_button = ctk.CTkButton(master=self.out_head_frame, fg_color="transparent", border_width=1, text_color=("gray10", "#DCE4EE"), text="↶",
+                                                width=10, command=self.swap_button_event)
+        self.oti_swap_button.grid(row=0, column=1)
         # out head copy button
         self.out_copy_button = ctk.CTkButton(master=self.out_head_frame, fg_color="transparent", border_width=1, text_color=("gray10", "#DCE4EE"), text="📋",
                                                 width=10, command=self.out_copy_button_event)
-        self.out_copy_button.grid(row=0, column=1)
+        self.out_copy_button.grid(row=0, column=2)
 
         # input textbox
         self.in_textbox = ctk.CTkTextbox(self.home_frame, width=400, height=515, font=ctk.CTkFont(family= "Consolas"))
@@ -206,15 +219,17 @@ class App(ctk.CTk):
             prompt=prompt,
             temperature=0,
             # maximum length of the response
-            max_output_tokens=800,
+            max_output_tokens=1024,
         )
-        self.out_textbox.insert(ctk.END, completion.result)
+        ai_result = completion.result
+        
+        self.out_textbox.insert(ctk.END, ai_result)
         self.out_textbox.see(ctk.END)  
 
         # save to history
         history_file.write(f"Command: {command}\n\n")
         history_file.write(f"In Code:\n{user_code}\n\n")
-        history_file.write(f"Out Code:\n{completion.result}\n\n")
+        history_file.write(f"Out Code:\n{ai_result}\n\n")
         history_file.write(f"{datetime.datetime.now()}\n")
         history_file.write("_"*112+"\n\n")
         
@@ -224,16 +239,18 @@ class App(ctk.CTk):
     
     # home swap output to in
     def swap_button_event(self):
-        data=self.out_textbox.get("1.0","end")
-        if data.isspace():
+        ai_code=self.out_textbox.get("1.0","end")
+        if ai_code.isspace():
             pass
         else:
-            self.in_textbox.delete("1.0","end")
-            self.in_textbox.insert(ctk.END,data)
+            if ai_code.startswith("```"):
+                ai_code = ai_code.strip()
+                ai_code = ai_code.strip("```")
+                ai_code = ai_code.strip("python")
+                ai_code = ai_code.strip()
 
-    # home delete input
-    def in_delete_button_event(self):
-        self.in_textbox.delete("1.0","end")
+            self.in_textbox.delete("1.0","end")
+            self.in_textbox.insert(ctk.END,ai_code)
     
     # home copy output 
     def out_copy_button_event(self):
@@ -241,8 +258,83 @@ class App(ctk.CTk):
         self.out_textbox.tag_add("sel", "1.0", "end")
         data=self.out_textbox.selection_get()
         pyperclip.copy(data)
+
+    # home execute function
+    def exec_button_event(self):
+
+        user_code_str = str(self.in_textbox.get("1.0","end"))
+
+        try:
+            user_code_obj = compile(user_code_str, "", "exec")
+            exec(user_code_obj, locals(), locals())
+        except OSError as err:
+            print("OS error:", err)
+        except ValueError:
+            print("ValueError")
+        except Exception as err:
+            print(f"Unexpected {err=}, {type(err)=}")
+            raise
+
+    # home open file function
+    def open_file(self, file_path):
+        try:
+            user_file = open(file_path, "r")
+            user_file_contents = user_file.read().strip()
+            self.in_textbox.delete("1.0",ctk.END)
+            self.in_textbox.insert(ctk.END, user_file_contents)
+            user_file.close()
+        except Exception as err:
+            print(f"Unexpected {err=}, {type(err)=}")
+            raise
+
+    def in_open_button_event(self):
+        files = [('All Files', '*.*'),  
+                ('Python Files', '*.py'), 
+                ('Text Document', '*.txt')] 
+        file_path = tkfd.askopenfilename(filetypes = files)
+        if file_path:
+            self.open_file(file_path)
+
+
+    # home save function
+    def in_save_button_event(self):
+        files = [('All Files', '*.*'),  
+             ('Python Files', '*.py'), 
+             ('Text Document', '*.txt')] 
+        user_save = tkfd.asksaveasfile(filetypes = files, defaultextension = files) 
+        if user_save:
+            user_in_code = self.in_textbox.get("1.0","end")
+            user_save.write(user_in_code)
+
+    # home delete input
+    def delete_input(self):
+        self.in_textbox.delete("1.0","end")
+        self.confirm_in.destroy()
+
+    # home delete input popup function
+    def in_delete_button_event(self):
+        self.confirm_in = ctk.CTkToplevel(self)
+        self.confirm_in.title("Clear Code")
+
+        self.confirm_in.attributes("-topmost", True)
+
+        # confirmation labels
+        confirm_in_label = ctk.CTkLabel(self.confirm_in, text="Are you sure you want to clear your code?")
+        confirm_in_label.grid(row=0, column=0, columnspan=2, padx=20, pady=(20,0))
+        
+        confirm_in_sublabel = ctk.CTkLabel(self.confirm_in, text="Ensure you've saved anything you'd like to keep.")
+        confirm_in_sublabel.grid(row=1, column=0, columnspan=2, padx=20, pady=(0,10))
+
+        # buttons
+        clear_in_decline_button = ctk.CTkButton(master=self.confirm_in, fg_color="transparent", border_width=1, text_color=("gray10", "#DCE4EE"), text="Nevermind",
+                                                width=10, command=self.confirm_in.destroy)
+        clear_in_decline_button.grid(row=2, column=0, pady=(0,20))
+
+        self.clear_in_accept_button = ctk.CTkButton(master=self.confirm_in, fg_color="#36719F", border_width=1, text_color=("white", "#DCE4EE"), text="I'm all set",
+                                                width=10, command=self.delete_input)
+        self.clear_in_accept_button.grid(row=2, column=1, pady=(0,20))   
     
-    # show history func
+    # history show history func
     def show_history(self):
         current_path = os.path.dirname(os.path.realpath(__file__))
         
@@ -254,7 +346,14 @@ class App(ctk.CTk):
         
         history_file.close()
 
-    # clear history func
+    # history clear history func
+    def clear_history(self):
+        current_path = os.path.dirname(os.path.realpath(__file__))
+        open(current_path + "/ai-files/history.txt", "w").close()
+        self.history_log_textbox.delete("1.0","end")
+        self.history_log_textbox.insert(ctk.END,"--History Cleared--")
+        self.confirm.destroy()
+    
     def history_clear_button_event(self):
         ## create confirmation pop-up
         self.confirm = ctk.CTkToplevel(self)
@@ -278,12 +377,7 @@ class App(ctk.CTk):
                                                 width=10, command=self.clear_history)
         self.clear_accept_button.grid(row=2, column=1, pady=(0,20))
         
-    def clear_history(self):
-        current_path = os.path.dirname(os.path.realpath(__file__))
-        open(current_path + "/ai-files/history.txt", "w").close()
-        self.history_log_textbox.delete("1.0","end")
-        self.history_log_textbox.insert(ctk.END,"--History Cleared--")
-        self.confirm.destroy()
+    
 
 
 
