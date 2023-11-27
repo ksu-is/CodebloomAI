@@ -223,7 +223,7 @@ class App(ctk.CTk):
         )
         ai_result = completion.result
         
-        self.out_textbox.insert(ctk.END, ai_result)
+        self.out_textbox.insert(ctk.END, f"{ai_result}")
         self.out_textbox.see(ctk.END)  
 
         # save to history

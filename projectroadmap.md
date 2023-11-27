@@ -34,8 +34,8 @@
 
 ## Sprint Week 2 
 ### Tasks
-- [x] Fix bugs
-    - [x] Bug 0
+- [ ] Fix bugs
+    - [ ] Bug 0
 - [x] Improve Home page
     - [x] Align text correctly
     - [ ] Make pressing 'Enter' on keyboard a trigger to run command (instead of having to press button)
@@ -52,7 +52,6 @@
     - [ ] Allow user to write further context to custom tailor their AI assistant
 
 ### Findings
-- Bug 0 stopped occurring after changes were made to code to improve robustness, may be solved, or maybe just not encountering it anymore
 - Creating keyboard functionality proved to be more difficult than expected
 - Allowing code to be represented with the proper color-coding may be near-impossible with Tkinter alone
     - Will investigate other library options for this feature
@@ -66,7 +65,7 @@
 
 ## Sprint Week 3
 ### Tasks
-- [ ] Fix bugs
+- [x] Fix bugs
 - [ ] Advanced Main features
     - [ ] Add keyboard shortcuts
     - [ ] Add ability to have multiple files open at once in sepreate taps
@@ -76,3 +75,6 @@
 - [ ] Run and find more bugs
 
 ### Findings
+- 11/27/23 | Bug 0 was the result of AI generation `ai_result` coming back empty, and insert function to output textbox `self.out_textbox.insert()` was returning error when no result could be retrieved.
+    - Fixed temporarily by replacing `ai_result` with `f"{ai_result}` so a missing ai generation would come back as `none` and not empty
+    - Looking into why ai generation is coming back empty. *May have to do with input size?*
