@@ -23,9 +23,7 @@
 
 ### Known Bugs
 - Bug 0
-    ```python
-    "File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.1776.0_x64__qbz5n2kfra8p0\Lib\tkinter\__init__.py", line 3808, in insert
-        self.tk.call((self._w, 'insert', index, chars) + args)
+    ```
         _tkinter.TclError: wrong # args: should be ".!ctkframe2.!ctktextbox2.!text insert index chars ?tagList chars tagList ...?"
     ```
     - Seems to occurs with certain code input and command combinations. 
