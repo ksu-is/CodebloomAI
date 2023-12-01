@@ -221,6 +221,7 @@ class App(ctk.CTk):
             # maximum length of the response
             max_output_tokens=1024,
         )
+        pprint.pprint(completion.candidates)
         ai_result = completion.result
         
         self.out_textbox.insert(ctk.END, f"{ai_result}")

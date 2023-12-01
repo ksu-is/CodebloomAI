@@ -63,7 +63,7 @@
 
 ## Sprint Week 3
 ### Tasks
-- [x] Fix bugs
+- [ ] Fix bugs
 - [ ] Advanced Main features
     - [ ] Add keyboard shortcuts
     - [ ] Add ability to have multiple files open at once in sepreate taps
@@ -73,6 +73,8 @@
 - [ ] Run and find more bugs
 
 ### Findings
-- 11/27/23 | Bug 0 was the result of AI generation `ai_result` coming back empty, and insert function to output textbox `self.out_textbox.insert()` was returning error when no result could be retrieved.
+- 11/27/23 | Bug 0 is the result of AI generation `ai_result` coming back empty, and insert function to output textbox `self.out_textbox.insert()` was returning error when no result could be retrieved.
     - Fixed temporarily by replacing `ai_result` with `f"{ai_result}` so a missing ai generation would come back as `none` and not empty
     - Looking into why ai generation is coming back empty. *May have to do with input size?*
+- 11/30/23 | Bug 0 is beginning to occur more frequently. Research indicates AI result coming back empty may have to do with requests per minute.
+    - The current integration of the PaLM API in this project is rough and I need to rework it. Properly manipulating the API for best optimization will require more research. Will update.

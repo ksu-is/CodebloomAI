@@ -1,5 +1,6 @@
 # CodebloomAI
 CodebloomAI is a python PaLM2-based AI code generator and modifier application, allowing side by side coding and AI assistance.
+![](doc-images/project-splash.png)
 
 ### PaLM2
 [PaLM2](https://github.com/google/generative-ai-docs/) is Google's AI lanuage model which drives conversational AI program [Google Bard](https://bard.google.com).
